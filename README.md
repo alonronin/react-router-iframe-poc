@@ -11,6 +11,6 @@ $ git clone && npm install
 then 
 
 ```bash
-$ git run frame
-$ git start
+$ npm run frame
+$ npm start
 ```
