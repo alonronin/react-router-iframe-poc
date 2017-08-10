@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "frame": "serve ./frame -p 8000",
-    "start": "webpack-dev-server --progress --open --hot --inline"
+    "start": "webpack-dev-server -d --progress --open --hot --inline --history-api-fallback"
   },
   "keywords": [],
   "author": "",

@@ -1,39 +1,58 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import {
-  BrowserRouter as Router,
-  NavLink,
-  Route
-} from 'react-router-dom'
 
-import Home from './Home';
-import Dashboard from './Dashboard';
 import Iframe from './Iframe';
+import mediator from './Mediator';
+import history from './history';
+import store from './store';
 
-function App() {
-  return <Router>
-    <div>
+const unlisten = history.listen((location, action) => {
+  // location is an object like window.location
+  console.log(action, location.pathname, location.state)
+  store.setActive(location.pathname);
+});
+
+function Link({ to, children }) {
+  return <button onClick={() => store.navigate(to)}>{children}</button>
+}
+
+@observer
+class App extends Component {
+  render() {
+    return <div>
       <h1>Hello from react</h1>
 
       <nav>
         <ul>
-          <li><NavLink to="/">Home</NavLink></li>
-          <li><NavLink to="/overview">Overview</NavLink></li>
-          <li><NavLink to="/inbox">Inbox</NavLink></li>
-          <li><NavLink to="/listings">Listings</NavLink></li>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/overview">Overview</Link>
+          </li>
+          <li>
+            <Link to="/inbox">Inbox</Link>
+          </li>
+          <li>
+            <Link to="/listings">Listings</Link>
+          </li>
         </ul>
       </nav>
 
-      <main>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/overview" component={Dashboard} />
-        <Route exact path="/inbox" component={Dashboard} />
-        <Route exact path="/listings" component={Dashboard} />
+      <p>{store.active}</p>
 
-        <Iframe src="//localhost:8000" />
+      <main>
+        <Iframe
+          src="//localhost:3000"
+          style={{
+            width: '100%',
+            height: '50vh'
+          }}
+          onLoad={mediator.init}
+        />
       </main>
     </div>
-  </Router>
+  }
 }
 
-export default observer(App);
+export default App;
